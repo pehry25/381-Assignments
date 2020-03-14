@@ -1,64 +1,38 @@
 package com.example.chartextract.view;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Paint.Style;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.example.chartextract.R;
 import com.example.chartextract.controller.MainController;
+import com.example.chartextract.model.ChartExtractModelListener;
 import com.example.chartextract.model.ChartModel;
 import com.example.chartextract.model.InteractionModel;
 
 
-public class DetailView extends View {
+public class DetailView extends View implements ChartExtractModelListener {
+
+    private Paint myPaint;
+    private Canvas myCanvas;
 
     private ChartModel Model;
     private MainController Controller;
     private InteractionModel iModel;
 
-    private TextView lbl_Yaxis;
-    private TextView lbl_XAxis;
-    private TextView lbl_To;
-    private EditText txt_YAxisLow;
-    private EditText txt_YAxisHigh;
-    private EditText txt_XAxisLow;
-    private EditText txt_XAxisHigh;
-
     public DetailView(Context aContext) {
         super(aContext);
-
-        lbl_Yaxis = new TextView(aContext);
-        lbl_Yaxis.setText("Y Axis: ");
-
-        lbl_XAxis = new TextView(aContext);
-        lbl_XAxis.setText("X Axis: ");
-
-        lbl_To = new TextView(aContext);
-        lbl_To.setText(" to ");
-
-        txt_YAxisLow = new EditText(aContext);
-        txt_YAxisHigh = new EditText(aContext);
-
-        txt_XAxisLow = new EditText(aContext);
-        txt_XAxisHigh = new EditText(aContext);
-
-        LinearLayout root = findViewById(R.id.detailview);
-        LinearLayout XRow = findViewById(R.id.detailview);
-        LinearLayout YRow = findViewById(R.id.detailview);
-
-        XRow.addView(lbl_XAxis);
-        XRow.addView(txt_XAxisLow);
-        XRow.addView(lbl_To);
-        XRow.addView(txt_XAxisHigh);
-
-        YRow.addView(lbl_Yaxis);
-        YRow.addView(txt_YAxisLow);
-        YRow.addView(lbl_To);
-        YRow.addView(txt_YAxisHigh);
-
-
+        myPaint = new Paint();
+        myCanvas = new Canvas();
+        setBackgroundColor(Color.BLUE);
     }
 
     public void SetModel(ChartModel nModel){
@@ -73,8 +47,14 @@ public class DetailView extends View {
         this.iModel = nIModel;
     }
 
-    public void onDraw(){
+    public void onDraw(Canvas c){
+        myPaint.setStyle(Style.FILL);
+        Bitmap bm_Chart = Model.getUploadedChart();
 
+        if(bm_Chart != null){
+            Bitmap bm_Full = Bitmap.createScaledBitmap(bm_Chart, this.getWidth(), this.getHeight(), false);
+            c.drawBitmap(bm_Full, 0,0,null);
+        }
     }
 
     public void modelChanged(){

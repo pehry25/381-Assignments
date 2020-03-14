@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ChartExtract</string>
+    <string name="app_name">Chart Extract</string>
     <string name="title_activity_main">MainActivity</string>
     <!--
     This string is used for square devices and overridden by hello_world in
@@ -7,4 +7,6 @@
     -->
     <string name="hello_world">Hello Square World!</string>
     <string name="choose_chart">Choose Chart</string>
+    <string name="take_screenshot">Take Screenshot</string>
+    <string name="export_data">Export Data</string>
 </resources>

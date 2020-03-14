@@ -8,7 +8,9 @@ import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +29,10 @@ public class MainActivity extends AppCompatActivity {
     private AxisView AxisView;
     private ChartView ChartView;
     private DetailView DetailView;
+    private MainController Controller;
+
+    private final int PIXELWIDTH = 1080;
+    private final int TOPROWHEIGHT = 325;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,21 +40,43 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         AxisView = new AxisView(this);
-        ChartView = new ChartView(this);
-        DetailView = new DetailView(this);
-
-        ChartModel ChartModel = new ChartModel();
         InteractionModel IModel = new InteractionModel();
 
-        MainController Controller = new MainController();
+        // CHART VIEW \\
+        ChartView = new ChartView(this);
+        ChartModel ChartModel = new ChartModel();
+        this.Controller = new MainController();
 
-        DetailView.SetController(Controller);
-        DetailView.SetIModel(IModel);
+        ChartView.SetController(this.Controller);
+        ChartView.SetModel(ChartModel);
+        ChartModel.addSubscriber(ChartView);
+        IModel.addSubscriber(ChartView);
+
+        // DETAIL VIEW \\
+        DetailView = new DetailView(this);
+        DetailView.SetController(this.Controller);
+        DetailView.SetModel(ChartModel);
+        ChartModel.addSubscriber(DetailView);
+        IModel.addSubscriber(DetailView);
 
 
-        LinearLayout root = findViewById(R.id.root);
 
-        root.addView(DetailView, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        // ADD VIEWS TO LAYOUT \\
+        LinearLayout TopRow = new LinearLayout(this);
+        TopRow.setOrientation(LinearLayout.HORIZONTAL);
+        TopRow.addView(DetailView, new LinearLayout.LayoutParams(
+                PIXELWIDTH/2,
+                TOPROWHEIGHT));
+        TopRow.addView(AxisView, new LinearLayout.LayoutParams(
+                PIXELWIDTH/2,
+                TOPROWHEIGHT));
+
+        LinearLayout root = new LinearLayout(this);
+        root.setOrientation(LinearLayout.VERTICAL);
+        root.addView(TopRow);
+        root.addView(ChartView);
+
+        this.setContentView(root);
     }
 
     @Override
@@ -68,6 +96,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.choose_chart:
                 chooseChartSelected();
                 return true;
+            case R.id.take_screenshot:
+                return super.onOptionsItemSelected(item);
+            case R.id.export_data:
+                return super.onOptionsItemSelected(item);
             default:
                 return super.onOptionsItemSelected(item);
         }
