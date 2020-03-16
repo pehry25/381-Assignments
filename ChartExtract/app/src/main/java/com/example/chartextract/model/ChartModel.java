@@ -7,10 +7,12 @@ import java.util.ArrayList;
 public class ChartModel {
 
     private Bitmap UploadedChart;
-    ArrayList<ChartExtractModelListener> subscribers;
+    private ArrayList<ChartExtractModelListener> subscribers;
+    private SelectionBox SelectionBox;
 
     public ChartModel(){
         subscribers = new ArrayList<>();
+        SelectionBox = null;
     }
 
     public void setUploadedChart(Bitmap nChart){
@@ -33,5 +35,13 @@ public class ChartModel {
         for(ChartExtractModelListener listener : subscribers){
             listener.modelChanged();
         }
+    }
+
+    public SelectionBox getSelectionBox() {
+        return SelectionBox;
+    }
+
+    public void setSelectionBox(float nLeft, float nTop, float nWidth, float nHeight) {
+        SelectionBox = new SelectionBox(nLeft, nTop, nWidth, nHeight);
     }
 }

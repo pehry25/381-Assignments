@@ -5,8 +5,7 @@ import java.util.ArrayList;
 public class InteractionModel {
 
     ArrayList<ChartExtractModelListener> subscribers;
-    float viewWidth, viewHeight;
-    float startX, startY, currentX, currentY;
+    private float viewWidth, viewHeight;
 
     public InteractionModel() {
         subscribers = new ArrayList<>();
@@ -25,6 +24,14 @@ public class InteractionModel {
         for (ChartExtractModelListener listener : subscribers) {
             listener.modelChanged();
         }
+    }
+
+    public float getViewWidth(){
+        return this.viewWidth;
+    }
+
+    public float getViewHeight(){
+        return this.viewHeight;
     }
 
 }
