@@ -2,8 +2,10 @@ package com.example.chartextract;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,17 +19,22 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chartextract.controller.MainController;
 import com.example.chartextract.model.ChartModel;
+import com.example.chartextract.model.ChartPoint;
 import com.example.chartextract.model.InteractionModel;
 import com.example.chartextract.view.AxisView;
 import com.example.chartextract.view.ChartView;
 import com.example.chartextract.view.DetailView;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
     private AxisView AxisView;
     private ChartView ChartView;
+    private ChartModel ChartModel;
     private DetailView DetailView;
     private MainController Controller;
 
@@ -44,11 +51,12 @@ public class MainActivity extends AppCompatActivity {
 
         // CHART VIEW \\
         ChartView = new ChartView(this);
-        ChartModel ChartModel = new ChartModel();
+        this.ChartModel = new ChartModel();
         this.Controller = new MainController();
 
         ChartView.SetController(this.Controller);
         ChartView.SetModel(ChartModel);
+        ChartView.SetIModel(IModel);
         ChartModel.addSubscriber(ChartView);
         IModel.addSubscriber(ChartView);
 
@@ -56,8 +64,13 @@ public class MainActivity extends AppCompatActivity {
         DetailView = new DetailView(this);
         DetailView.SetController(this.Controller);
         DetailView.SetModel(ChartModel);
+        DetailView.SetIModel(IModel);
         ChartModel.addSubscriber(DetailView);
         IModel.addSubscriber(DetailView);
+
+        // CONTROLLER \\
+        Controller.setChartModel(ChartModel);
+        Controller.setIModel(IModel);
 
 
 
@@ -97,20 +110,49 @@ public class MainActivity extends AppCompatActivity {
                 chooseChartSelected();
                 return true;
             case R.id.take_screenshot:
-                return super.onOptionsItemSelected(item);
+                takeScreenshot();
             case R.id.export_data:
-                return super.onOptionsItemSelected(item);
+                exportData();
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
     private void chooseChartSelected(){
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        Intent intent = new Intent()
+            .setType("image/*")
+            .setAction(Intent.ACTION_GET_CONTENT);
 
         startActivityForResult(Intent.createChooser(intent, "Select a chart"), 123);
+    }
+
+    private void takeScreenshot(){
+
+        Date currentDate = Calendar.getInstance().getTime();
+
+        String[] tmpDate = currentDate.toString().split(" ");
+        String nDate = tmpDate[0] + tmpDate[1] + tmpDate[2] + "_" + tmpDate[3];
+
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT)
+                .addCategory(Intent.CATEGORY_OPENABLE)
+                .setType("image/png")
+                .putExtra(Intent.EXTRA_TITLE, "ChartScreenshot_" + nDate + ".png");
+        startActivityForResult(intent, 234);
+    }
+
+    private void exportData(){
+
+        Date currentDate = Calendar.getInstance().getTime();
+
+        String[] tmpDate = currentDate.toString().split(" ");
+        String nDate = tmpDate[0] + tmpDate[1] + tmpDate[2] + "_" + tmpDate[3];
+
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT)
+                .addCategory(Intent.CATEGORY_OPENABLE)
+                .setType("text/plain")
+                .putExtra(Intent.EXTRA_TITLE, "ChartData_" + nDate + ".csv");
+
+        startActivityForResult(intent, 567);
     }
 
     @Override
@@ -128,6 +170,41 @@ public class MainActivity extends AppCompatActivity {
                 }
 
             }
+        } else if(requestCode == 234 && resultCode == RESULT_OK){
+            Uri newFile = data.getData();
+            try {
+                ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(newFile, "w");
+                FileOutputStream fos = new FileOutputStream(pfd.getFileDescriptor());
+                Bitmap screen = Bitmap.createBitmap(ChartView.getWidth(), ChartView.getHeight(),
+                        Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(screen);
+                ChartView.draw(canvas);
+                screen.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if(requestCode == 567 && resultCode == RESULT_OK){
+            Uri DataFile = data.getData();
+
+            try{
+                ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(DataFile, "w");
+                FileOutputStream fos = new FileOutputStream(pfd.getFileDescriptor());
+
+                String contents = "x,y\n";
+                for(ChartPoint CP : this.ChartModel.getChartPointsList()){
+                    contents += CP.getxCoord() + "," + CP.getyCoord() + "\n";
+                }
+
+                byte[] bytesArr = contents.getBytes();
+
+                fos.write(bytesArr);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+
         }
     }
 

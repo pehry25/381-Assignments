@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 public class InteractionModel {
 
-    ArrayList<ChartExtractModelListener> subscribers;
+    private ArrayList<ChartExtractModelListener> subscribers;
     private float viewWidth, viewHeight;
+    private SelectionBox Box;
+    private ChartPoint SelectedChartPoint;
 
     public InteractionModel() {
         subscribers = new ArrayList<>();
@@ -32,6 +34,20 @@ public class InteractionModel {
 
     public float getViewHeight(){
         return this.viewHeight;
+    }
+
+    public void setSelectionBox(SelectionBox B){
+        this.Box = B;
+        notifySubscribers();
+    }
+
+    public void setSelectedChartPoint(ChartPoint P){
+        this.SelectedChartPoint = P;
+        notifySubscribers();
+    }
+
+    public ChartPoint getSelectedChartPoint(){
+        return SelectedChartPoint;
     }
 
 }

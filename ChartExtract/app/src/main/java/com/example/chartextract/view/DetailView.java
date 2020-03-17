@@ -54,6 +54,13 @@ public class DetailView extends View implements ChartExtractModelListener {
         if(bm_Chart != null){
             Bitmap bm_Full = Bitmap.createScaledBitmap(bm_Chart, this.getWidth(), this.getHeight(), false);
             c.drawBitmap(bm_Full, 0,0,null);
+
+            float width = getWidth();
+            float height = getHeight();
+
+            myPaint.setStrokeWidth(7);
+            c.drawLine(width/2, 0, width/2, height, myPaint); //UP <-> DOWN
+            c.drawLine(0, height/2, width, height/2, myPaint); // LEFT <-> RIGHT
         }
     }
 
