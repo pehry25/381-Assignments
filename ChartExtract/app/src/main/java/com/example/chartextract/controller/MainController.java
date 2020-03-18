@@ -4,6 +4,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.chartextract.model.ChartModel;
+import com.example.chartextract.model.ChartPointModel;
 import com.example.chartextract.model.InteractionModel;
 
 public class MainController implements View.OnTouchListener {
@@ -46,23 +47,28 @@ public class MainController implements View.OnTouchListener {
                 switch (event.getAction()){
                     case MotionEvent.ACTION_DOWN:
 
-                        if(ChartModel.getSelectionBox() == null){
+                        if(ChartModel.getSelectionBoxModel() == null){
 
                             // User has tapped on ChartModel
                             ChartModel.setSelectionBox(normX, normY,0,0);
-                            IModel.setSelectionBox(ChartModel.getSelectionBox());
+                            IModel.setSelectionBox(ChartModel.getSelectionBoxModel());
 
                             currentState = State.CREATING_SELBOX;
                         } else {
-                            // Check to see if user has touched down on a handler
+                            // Check to see if user has touched down on a handler or a Chart Point
                             if(ChartModel.checkResizeHandles(normX, normY, IModel.getViewWidth(), IModel.getViewHeight())){
                                 currentState = State.DRAGGING_SELBOX;
-                            } else if (ChartModel.checkMoveHandles(normX, normY, IModel.getViewWidth(), IModel.getViewHeight())){
+                            } else if (ChartModel.checkMoveHandles(normX, normY, IModel.getViewWidth(), IModel.getViewHeight())) {
                                 currentState = State.MOVING_SELBOX;
+                            } else if (ChartModel.findChartPoint(normX, normY) != null){
+                                ChartPointModel CP = ChartModel.findChartPoint(normX, normY);
+                                IModel.setSelectedChartPointModel(CP);
+                                currentState = State.MOVING_POINT;
                             } else {
                                 // Create chart point
-                                ChartModel.addChartPoint(normX, normY, 0, 0);
-                                IModel.setSelectedChartPoint(ChartModel.getLatestChartPoint());
+                                ChartModel.addChartPoint(normX, normY,  IModel.getViewWidth(), IModel.getViewHeight(), IModel.getSelectionBox());
+                                IModel.setSelectedChartPointModel(ChartModel.getLatestChartPoint());
+
                                 currentState = State.CREATING_POINT;
                             }
                         }
@@ -75,6 +81,7 @@ public class MainController implements View.OnTouchListener {
 
                 switch(event.getAction()){
                     case MotionEvent.ACTION_UP:
+                        IModel.setSelectedChartPointModel(null);
                         currentState = State.READY;
                         break;
                     case MotionEvent.ACTION_MOVE:
@@ -92,6 +99,7 @@ public class MainController implements View.OnTouchListener {
                         currentState = State.MOVING_SELBOX;
                         break;
                     case MotionEvent.ACTION_UP:
+                        IModel.setSelectedChartPointModel(null);
                         currentState = State.READY;
                         break;
                 }
@@ -115,16 +123,30 @@ public class MainController implements View.OnTouchListener {
 
                 switch(event.getAction()){
                     case MotionEvent.ACTION_UP:
-                        IModel.setSelectedChartPoint(null);
+                        IModel.setSelectedChartPointModel(null);
                         currentState = State.READY;
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        ChartModel.moveSelectedChartPoint(IModel.getSelectedChartPoint(), normDX, normDY);
+                        ChartModel.moveChartPoint(IModel.getSelectedChartPointModel(), normDX, normDY, IModel.getSelectionBox());
+                        IModel.setSelectedChartPointModel(IModel.getSelectedChartPointModel());
                         currentState = State.CREATING_POINT;
                         break;
                 }
 
                 break;
+
+            case MOVING_POINT:
+                switch(event.getAction()){
+                    case MotionEvent.ACTION_UP:
+                        IModel.setSelectedChartPointModel(null);
+                        currentState = State.READY;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        ChartModel.moveChartPoint(IModel.getSelectedChartPointModel(), normDX, normDY, IModel.getSelectionBox());
+                        IModel.setSelectedChartPointModel(IModel.getSelectedChartPointModel());
+                        currentState = State.MOVING_POINT;
+                        break;
+                }
         }
         return true;
     }

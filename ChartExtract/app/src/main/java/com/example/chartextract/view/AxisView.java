@@ -114,4 +114,25 @@ public class AxisView extends LinearLayout {
         this.addView(root);
         setBackgroundColor(Color.LTGRAY);
     }
+
+    public void setLbl_CurrentLoc(String s){
+        lbl_CurrentLoc.setText(s);
+    }
+
+    public void setTxtYLow(String s){
+        this.txt_YLow.setText(s);
+    }
+
+    public void setTxtYHigh(String s){
+        this.txt_YHigh.setText(s);
+    }
+
+    public void setTxtXLow(String s){
+        this.txt_XLow.setText(s);
+    }
+
+    public void setTxtXHigh(String s){
+        this.txt_XHigh.setText(s);
+    }
+
 }

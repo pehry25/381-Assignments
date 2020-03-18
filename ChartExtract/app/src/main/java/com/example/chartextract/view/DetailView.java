@@ -52,8 +52,30 @@ public class DetailView extends View implements ChartExtractModelListener {
         Bitmap bm_Chart = Model.getUploadedChart();
 
         if(bm_Chart != null){
-            Bitmap bm_Full = Bitmap.createScaledBitmap(bm_Chart, this.getWidth(), this.getHeight(), false);
-            c.drawBitmap(bm_Full, 0,0,null);
+
+            Bitmap bm;
+            if(iModel.getSelectedChartPointModel() == null){
+                bm = Bitmap.createScaledBitmap(bm_Chart, this.getWidth(), this.getHeight(), false);
+            } else {
+                int x = Math.round(iModel.getSelectedChartPointModel().getX());
+                int y = Math.round(iModel.getSelectedChartPointModel().getY());
+
+
+                bm = Bitmap.createScaledBitmap(bm_Chart, this.getWidth()*3, this.getHeight()*3, false);
+
+//                if(x > 0 && y > 0){
+//
+//                    int focalX = x * this.getRight() / this.getWidth();
+//                    int focalY = y * this.getBottom() / this.getHeight();
+//
+//                    //bm = Bitmap.createScaledBitmap(bm_Chart, focalX, focalY, false);
+//                } else {
+//                    bm = Bitmap.createScaledBitmap(bm_Chart, this.getWidth(), this.getHeight(), false);
+//                }
+            }
+
+            c.drawBitmap(bm, 0,0,null);
+
 
             float width = getWidth();
             float height = getHeight();

@@ -8,13 +8,14 @@ public class ChartModel {
 
     private Bitmap UploadedChart;
     private ArrayList<ChartExtractModelListener> subscribers;
-    private ArrayList<ChartPoint> chartPoints;
-    private SelectionBox SelectionBox;
+    private ArrayList<ChartPointModel> chartPointModels;
+    private SelectionBoxModel SelectionBoxModel;
+    private InteractionModel iModel;
 
     public ChartModel(){
         subscribers = new ArrayList<>();
-        chartPoints = new ArrayList<>();
-        SelectionBox = null;
+        chartPointModels = new ArrayList<>();
+        SelectionBoxModel = null;
     }
 
     public void setUploadedChart(Bitmap nChart){
@@ -39,52 +40,67 @@ public class ChartModel {
         }
     }
 
-    public SelectionBox getSelectionBox() {
-        return SelectionBox;
+    public SelectionBoxModel getSelectionBoxModel() {
+        return SelectionBoxModel;
     }
 
     public void setSelectionBox(float nLeft, float nTop, float nWidth, float nHeight) {
-        SelectionBox = new SelectionBox(nLeft, nTop, nWidth, nHeight);
+        SelectionBoxModel = new SelectionBoxModel(nLeft, nTop, nWidth, nHeight);
         notifySubs();
     }
 
     public void resizeSelectionBox(float dx, float dy){
-        SelectionBox.resize(dx, dy);
+        SelectionBoxModel.resize(dx, dy);
         notifySubs();
     }
 
     public void moveSelectionBox(float dx, float dy){
-        SelectionBox.move(dx,dy);
+        SelectionBoxModel.move(dx,dy);
         notifySubs();
     }
 
     public boolean checkResizeHandles(float dx, float dy, float nheight, float nwidth){
-        return SelectionBox.selectedResizeHandles(dx, dy, nheight, nwidth);
+        return SelectionBoxModel.selectedResizeHandles(dx, dy, nheight, nwidth);
     }
 
     public boolean checkMoveHandles(float dx, float dy, float nheight, float nwidth){
-        return SelectionBox.selectedMoveHandle(dx, dy, nheight, nwidth);
+        return SelectionBoxModel.selectedMoveHandle(dx, dy, nheight, nwidth);
     }
 
-    public void addChartPoint(float dx, float dy, float nheight, float nwidth){
-        this.chartPoints.add(new ChartPoint(dx, dy));
+    public void addChartPoint(float dx, float dy, float nwidth, float nheight, SelectionBoxModel Box){
+        this.chartPointModels.add(new ChartPointModel(dx, dy, nwidth, nheight, Box));
         notifySubs();
     }
 
     public int getChartPointsCount(){
-        return this.chartPoints.size();
+        return this.chartPointModels.size();
     }
 
-    public ArrayList<ChartPoint> getChartPointsList(){
-        return this.chartPoints;
+    public ArrayList<ChartPointModel> getChartPointsList(){
+        return this.chartPointModels;
     }
 
-    public ChartPoint getLatestChartPoint(){
-        return this.chartPoints.get(chartPoints.size()-1);
+    public ChartPointModel getLatestChartPoint(){
+        return this.chartPointModels.get(chartPointModels.size()-1);
     }
 
-    public void moveSelectedChartPoint(ChartPoint c, float dx, float dy){
-        c.move(dx, dy);
+    public void moveChartPoint(ChartPointModel c, float dx, float dy, SelectionBoxModel Box){
+        c.move(dx, dy, Box);
         notifySubs();
     }
+
+    public ChartPointModel findChartPoint(float x, float y) {
+        ChartPointModel Point = null;
+
+        for(ChartPointModel CP : chartPointModels){
+            if(CP.contains(x,y)){
+                Point = CP;
+                break;
+            }
+        }
+
+        return Point;
+    }
 }
+
+

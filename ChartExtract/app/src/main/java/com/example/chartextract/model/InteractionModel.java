@@ -1,13 +1,16 @@
 package com.example.chartextract.model;
 
+import com.example.chartextract.view.AxisView;
+
 import java.util.ArrayList;
 
 public class InteractionModel {
 
     private ArrayList<ChartExtractModelListener> subscribers;
     private float viewWidth, viewHeight;
-    private SelectionBox Box;
-    private ChartPoint SelectedChartPoint;
+    private SelectionBoxModel Box;
+    private ChartPointModel selectedChartPointModel;
+    private AxisView AxisView;
 
     public InteractionModel() {
         subscribers = new ArrayList<>();
@@ -16,6 +19,10 @@ public class InteractionModel {
     public void setViewSize(float width, float height) {
         viewWidth = width;
         viewHeight = height;
+    }
+
+    public void setAxisView(AxisView AV){
+        this.AxisView = AV;
     }
 
     public void addSubscriber(ChartExtractModelListener subscriber) {
@@ -36,18 +43,29 @@ public class InteractionModel {
         return this.viewHeight;
     }
 
-    public void setSelectionBox(SelectionBox B){
+    public void setSelectionBox(SelectionBoxModel B){
         this.Box = B;
         notifySubscribers();
     }
 
-    public void setSelectedChartPoint(ChartPoint P){
-        this.SelectedChartPoint = P;
+    public SelectionBoxModel getSelectionBox(){
+        return this.Box;
+    }
+
+    public void setSelectedChartPointModel(ChartPointModel P){
+        this.selectedChartPointModel = P;
+
+        if(P != null && AxisView != null) {
+            AxisView.setLbl_CurrentLoc(P.getxCoord() + "," + P.getyCoord());
+        } else if (P == null && AxisView != null){
+            AxisView.setLbl_CurrentLoc("0,0");
+        }
+
         notifySubscribers();
     }
 
-    public ChartPoint getSelectedChartPoint(){
-        return SelectedChartPoint;
+    public ChartPointModel getSelectedChartPointModel(){
+        return selectedChartPointModel;
     }
 
 }

@@ -1,25 +1,19 @@
 package com.example.chartextract.view;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.provider.MediaStore;
 import android.view.View;
 
 import com.example.chartextract.controller.MainController;
 import com.example.chartextract.model.ChartExtractModelListener;
 import com.example.chartextract.model.ChartModel;
-import com.example.chartextract.model.ChartPoint;
+import com.example.chartextract.model.ChartPointModel;
 import com.example.chartextract.model.InteractionModel;
-import com.example.chartextract.model.SelectionBox;
+import com.example.chartextract.model.SelectionBoxModel;
 
 public class ChartView extends View implements ChartExtractModelListener {
 
@@ -69,7 +63,7 @@ public class ChartView extends View implements ChartExtractModelListener {
             Bitmap bm_Full = Bitmap.createScaledBitmap(bm_Chart, this.getWidth(), this.getHeight(), false);
             c.drawBitmap(bm_Full, 0,0,null);
 
-            SelectionBox b = Model.getSelectionBox();
+            SelectionBoxModel b = Model.getSelectionBoxModel();
             if(b != null){
 
                 myPaint.setStyle(Style.STROKE);
@@ -92,9 +86,9 @@ public class ChartView extends View implements ChartExtractModelListener {
 
                 if(Model.getChartPointsCount() > 0){
                     myPaint.setStyle(Style.FILL_AND_STROKE);
-                    for(ChartPoint CP : Model.getChartPointsList()){
+                    for(ChartPointModel CP : Model.getChartPointsList()){
 
-                        if(CP == iModel.getSelectedChartPoint()){
+                        if(CP == iModel.getSelectedChartPointModel()){
                             myPaint.setColor(Color.GREEN);
                         } else {
                             myPaint.setStrokeWidth(20);

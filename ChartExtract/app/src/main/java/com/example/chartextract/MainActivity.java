@@ -10,16 +10,13 @@ import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.chartextract.controller.MainController;
 import com.example.chartextract.model.ChartModel;
-import com.example.chartextract.model.ChartPoint;
+import com.example.chartextract.model.ChartPointModel;
 import com.example.chartextract.model.InteractionModel;
 import com.example.chartextract.view.AxisView;
 import com.example.chartextract.view.ChartView;
@@ -39,15 +36,16 @@ public class MainActivity extends AppCompatActivity {
     private MainController Controller;
 
     private final int PIXELWIDTH = 1080;
-    private final int TOPROWHEIGHT = 325;
+    private final int TOPROWHEIGHT = 315;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        AxisView = new AxisView(this);
         InteractionModel IModel = new InteractionModel();
+        AxisView = new AxisView(this);
+        IModel.setAxisView(AxisView);
 
         // CHART VIEW \\
         ChartView = new ChartView(this);
@@ -71,8 +69,6 @@ public class MainActivity extends AppCompatActivity {
         // CONTROLLER \\
         Controller.setChartModel(ChartModel);
         Controller.setIModel(IModel);
-
-
 
         // ADD VIEWS TO LAYOUT \\
         LinearLayout TopRow = new LinearLayout(this);
@@ -191,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                 FileOutputStream fos = new FileOutputStream(pfd.getFileDescriptor());
 
                 String contents = "x,y\n";
-                for(ChartPoint CP : this.ChartModel.getChartPointsList()){
+                for(ChartPointModel CP : this.ChartModel.getChartPointsList()){
                     contents += CP.getxCoord() + "," + CP.getyCoord() + "\n";
                 }
 
