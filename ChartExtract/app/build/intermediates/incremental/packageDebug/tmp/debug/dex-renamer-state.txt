@@ -1,0 +1,7 @@
+#Tue Mar 17 22:21:30 CST 2020
+base.0=C\:\\Users\\peter\\Documents\\GitHub\\381-Assignments\\ChartExtract\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\out\\classes.dex
+path.1=classes.dex
+renamed.1=classes2.dex
+path.0=classes.dex
+renamed.0=classes.dex
+base.1=C\:\\Users\\peter\\Documents\\GitHub\\381-Assignments\\ChartExtract\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\out\\classes.dex

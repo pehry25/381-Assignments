@@ -1,0 +1,67 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.chartextract"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="26"
+8-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="29" />
+9-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.WAKE_LOCK" />
+11-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml:5:5-68
+11-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml:5:22-65
+12
+13    <uses-feature android:name="android.hardware.type.watch" />
+13-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml:7:5-64
+13-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml:7:19-61
+14
+15    <application
+15-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml:9:5-34:19
+16        android:allowBackup="true"
+16-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml:10:9-35
+17        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+17-->[androidx.core:core:1.0.2] C:\Users\peter\.gradle\caches\transforms-2\files-2.1\aaca0b4c7bc5e3b44b7d05468fa4cf78\core-1.0.2\AndroidManifest.xml:22:18-86
+18        android:debuggable="true"
+19        android:extractNativeLibs="false"
+20        android:icon="@mipmap/ic_launcher"
+20-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml:11:9-43
+21        android:label="@string/app_name"
+21-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml:12:9-41
+22        android:roundIcon="@mipmap/ic_launcher_round"
+22-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml:13:9-54
+23        android:supportsRtl="true"
+23-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml:14:9-35
+24        android:testOnly="true"
+25        android:theme="@style/AppTheme" >
+25-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml:15:9-40
+26        <activity android:name="com.example.chartextract.MainActivity" >
+26-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml:16:9-22:20
+26-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml:16:19-47
+27            <intent-filter>
+27-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml:17:13-21:29
+28                <action android:name="android.intent.action.MAIN" />
+28-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml:18:17-69
+28-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml:18:25-66
+29
+30                <category android:name="android.intent.category.LAUNCHER" />
+30-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml:20:17-77
+30-->C:\Users\peter\Documents\GitHub\381-Assignments\ChartExtract\app\src\main\AndroidManifest.xml:20:27-74
+31            </intent-filter>
+32        </activity>
+33
+34        <!-- <uses-library -->
+35        <!-- android:name="com.google.android.wearable" -->
+36        <!-- android:required="true" /> -->
+37        <!-- &lt;!&ndash; -->
+38        <!-- Set to true if your app is Standalone, that is, it does not require the handheld -->
+39        <!-- app to run. -->
+40        <!-- &ndash;&gt; -->
+41        <!-- <meta-data -->
+42        <!-- android:name="com.google.android.wearable.standalone" -->
+43        <!-- android:value="true" /> -->
+44    </application>
+45
+46</manifest>
